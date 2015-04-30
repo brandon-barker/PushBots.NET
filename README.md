@@ -1,7 +1,7 @@
 # PushBots.NET
-Unofficial .NET Client Library for the [PushBots v1 API](https://pushbots.com/developer/api/1)
+**Unofficial** .NET Client Library for the [PushBots v1 API](https://pushbots.com/developer/api/1)
 
-***This library is still in early development and is not yet ready for production use***
+*This library is still in early development and is not yet ready for production use!*
 
 ### Quick Start
 
