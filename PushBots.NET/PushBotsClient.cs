@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,7 +16,10 @@ namespace PushBots.NET
         private string AppId { get; set; }
         private string Secret { get; set; }
 
-        private readonly ClientFactory _clientFactory;
+        private readonly IClientFactory _clientFactory;
+
+        private readonly string _singlePushApiPath = PushBotsServiceConfiguration.Settings.SinglePushApiPath;
+        private readonly string _batchPushApiPath = PushBotsServiceConfiguration.Settings.BatchPushApiPath;
 
         public PushBotsClient(string appId, string secret)
         {
@@ -25,30 +29,18 @@ namespace PushBots.NET
             _clientFactory = new ClientFactory();
         }
 
-        public async Task PushSingle(SinglePush message)
+        public async Task<HttpResponseMessage> PushSingle(SinglePush message)
         {
             var client = _clientFactory.GetPushClient(AppId, Secret);
 
-            var response = await client.PostAsJsonAsync("push/one", message);
-
-            if (response.IsSuccessStatusCode)
-            {
-            }
-
-            client.Dispose();
+            return await client.PostAsJsonAsync(_singlePushApiPath, message);
         }
 
-        public async Task PushBatch(BatchPush message)
+        public async Task<HttpResponseMessage> PushBatch(BatchPush message)
         {
             var client = _clientFactory.GetPushClient(AppId, Secret);
 
-            var response = await client.PostAsJsonAsync("push/all", message);
-
-            if (response.IsSuccessStatusCode)
-            {
-            }
-
-            client.Dispose();
+            return await client.PostAsJsonAsync(_batchPushApiPath, message);
         }
     }
 }
