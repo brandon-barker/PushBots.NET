@@ -12,53 +12,43 @@ namespace PushBots.NET
 {
     public class PushBotsClient : IPushBotsClient
     {
-        private const string ApiUrl = "https://api.pushbots.com/";
-
         private string AppId { get; set; }
         private string Secret { get; set; }
+
+        private readonly ClientFactory _clientFactory;
 
         public PushBotsClient(string appId, string secret)
         {
             AppId = appId;
             Secret = secret;
+
+            _clientFactory = new ClientFactory();
         }
 
         public async Task PushSingle(SinglePush message)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(ApiUrl);
-                client.DefaultRequestHeaders.Accept.Clear();                
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Add("x-pushbots-appid", AppId);
-                client.DefaultRequestHeaders.Add("x-pushbots-secret", Secret);
-                
-                var response = await client.PostAsJsonAsync("push/one", message);                
+            var client = _clientFactory.GetPushClient(AppId, Secret);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var pushUri = response.Headers.Location;                    
-                }
+            var response = await client.PostAsJsonAsync("push/one", message);
+
+            if (response.IsSuccessStatusCode)
+            {
             }
+
+            client.Dispose();
         }
 
         public async Task PushBatch(BatchPush message)
         {
-            using (var client = new HttpClient())
+            var client = _clientFactory.GetPushClient(AppId, Secret);
+
+            var response = await client.PostAsJsonAsync("push/all", message);
+
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri(ApiUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Add("x-pushbots-appid", AppId);
-                client.DefaultRequestHeaders.Add("x-pushbots-secret", Secret);
-
-                var response = await client.PostAsJsonAsync("push/all", message);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var pushUri = response.Headers.Location;
-                }
             }
+
+            client.Dispose();
         }
     }
 }
