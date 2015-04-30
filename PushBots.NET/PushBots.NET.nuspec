@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Brandon Barker</authors>
+    <owners>Brandon Barker</owners>
+    <projectUrl>https://github.com/brandon-barker/PushBots.NET</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>    
+    <copyright>Copyright 2015</copyright>
+    <tags>PushBots .NET push notifications</tags>
+  </metadata>
+</package>
