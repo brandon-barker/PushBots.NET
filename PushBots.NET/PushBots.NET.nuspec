@@ -10,6 +10,6 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>    
     <copyright>Copyright 2015</copyright>
-    <tags>PushBots .NET push notifications</tags>
+    <tags>pushbots pushbots.net push notifications android ios</tags>
   </metadata>
 </package>
