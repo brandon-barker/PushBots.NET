@@ -42,7 +42,7 @@ var pushMessageSingle = new SinglePush()
                 Payload = JObject.Parse(@"{ 'openURL': 'http://www.google.com/' }")
             };
 
-            await client.PushSingle(pushMessageSingle);
+            await client.Push(pushMessageSingle);
 ```
 
 #### Batch Push
@@ -57,5 +57,31 @@ var pushMessage = new BatchPush()
                 Platforms = new[] { Platform.Android, Platform.iOS }
             };
 
-            var result = await client.PushBatch(pushMessage);
+            var result = await client.Push(pushMessage);
+```
+
+#### Badge
+
+[Update device Badge](https://pushbots.com/developer/api/1#badge)
+
+```c#
+var result =
+    await
+        client.Badge(
+            "APA91x9bhzxxZC88kxxAXrELuVQ38WWC-yrX6MpgNgjylVdXLygkbGbIU9x6aToJl3C5nVGJtdteAyGVbY19TSBWYnYip0-Arjv3-6xxxxxx",
+            "0", 1);
+
+return result;
+```
+
+**NOTE: Currently only supports iOS platform, if you pass through a "1" for Android it will return an error**
+
+#### Analytics
+
+[Get Push Analytics for a single application](https://pushbots.com/developer/api/1#getAnalytics)
+
+```c#
+var result = await client.GetPushAnalytics();
+
+return result;
 ```

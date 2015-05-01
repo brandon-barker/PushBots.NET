@@ -13,7 +13,7 @@ namespace PushBots.NET
     {
         private readonly string _apiUrl = PushBotsServiceConfiguration.Settings.ApiUrl;
 
-        public HttpClient GetClient(string appId, string secret)
+        public HttpClient GetClient(string appId)
         {
             var client = new HttpClient { BaseAddress = new Uri(_apiUrl) };
 
@@ -24,7 +24,7 @@ namespace PushBots.NET
             return client;
         }
 
-        public HttpClient GetPushClient(string appId, string secret)
+        public HttpClient GetClient(string appId, string secret)
         {
             var client = new HttpClient { BaseAddress = new Uri(_apiUrl) };
 
