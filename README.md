@@ -22,7 +22,7 @@ Add a configSection to your Web.config or App.config file
 Create an instance of **PushBotClient** by passing in your ***Application ID*** and ***Secret*** (get this from your App settings page on the PushBots dashboard)
 
 ```c#
-var client = new PushBotsClient("551658091d0ab1f85f8b457d", "b03052e6c81a337506824b4f3165ecc0");
+var client = new PushBotsClient("55165801f85f8b457d", "b03052506824b4f3165ecc0");
 ```
 
 ### Push
