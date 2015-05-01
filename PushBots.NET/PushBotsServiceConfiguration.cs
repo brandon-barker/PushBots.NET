@@ -39,5 +39,19 @@ namespace PushBots.NET
             get { return (string)this["batchPushApiPath"]; }
             set { this["batchPushApiPath"] = value; }
         }
+
+        [ConfigurationProperty("badgeApiPath", DefaultValue = "badge")]
+        public string BadgeApiPath
+        {
+            get { return (string)this["badgeApiPath"]; }
+            set { this["badgeApiPath"] = value; }
+        }
+
+        [ConfigurationProperty("analyticsApiPath", DefaultValue = "analytics")]
+        public string AnalyticsApiPath
+        {
+            get { return (string)this["analyticsApiPath"]; }
+            set { this["analyticsApiPath"] = value; }
+        }
     }
 }
