@@ -9,6 +9,7 @@ namespace PushBots.NET
 {
     public class PushBotsServiceConfiguration : ConfigurationSection
     {
+        // ReSharper disable once InconsistentNaming
         private static readonly PushBotsServiceConfiguration _settings = ConfigurationManager.GetSection("PushBotsServiceSettings") as PushBotsServiceConfiguration;
 
         public static PushBotsServiceConfiguration Settings
@@ -52,6 +53,13 @@ namespace PushBots.NET
         {
             get { return (string)this["analyticsApiPath"]; }
             set { this["analyticsApiPath"] = value; }
+        }
+
+        [ConfigurationProperty("devicesApiPath", DefaultValue = "devices")]
+        public string DevicesApiPath
+        {
+            get { return (string)this["devicesApiPath"]; }
+            set { this["devicesApiPath"] = value; }
         }
     }
 }

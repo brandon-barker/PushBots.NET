@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using PushBots.NET.Exceptions;
 using PushBots.NET.Models;
 
 namespace PushBots.NET
@@ -23,6 +24,7 @@ namespace PushBots.NET
         private readonly string _batchPushApiPath = PushBotsServiceConfiguration.Settings.BatchPushApiPath;
         private readonly string _badgeApiPath = PushBotsServiceConfiguration.Settings.BadgeApiPath;
         private readonly string _analyticsApiPath = PushBotsServiceConfiguration.Settings.AnalyticsApiPath;
+        private readonly string _devicesApiPath = PushBotsServiceConfiguration.Settings.DevicesApiPath;
 
         /// <summary>
         /// Instantiate a PushBotsClient
@@ -90,6 +92,37 @@ namespace PushBots.NET
             var analytics = await response.Content.ReadAsAsync<JObject>();
 
             return analytics;
+        }
+
+        /// <summary>
+        /// Get all registered Devices
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Device>> GetDevices()
+        {
+            var client = _clientFactory.GetClient(AppId, Secret);
+            var response = await client.GetAsync(_devicesApiPath);
+            var analytics = await response.Content.ReadAsAsync<List<Device>>();
+
+            return analytics;
+        }
+
+        /// <summary>
+        /// Get all Device info for a specified alias
+        /// </summary>
+        /// <param name="alias"></param>
+        /// <returns></returns>
+        public async Task<Device> GetDeviceByAlias(string alias)
+        {
+            var devices = await GetDevices();
+            var device = devices.FirstOrDefault(p => p.Alias == alias);
+
+            if (device != null)
+            {
+                return device;
+            }
+
+            throw new DeviceNotFoundException(String.Format("Could not find a matching device with the supplied alias: {0}", alias));
         }
     }
 }
