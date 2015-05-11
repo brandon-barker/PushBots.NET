@@ -1,7 +1,27 @@
 # PushBots.NET
 **Unofficial** .NET Client Library for the [PushBots v1 API](https://pushbots.com/developer/api/1)
 
-### Quick Start
+Table of Contents
+-----------------
+* [Quick Start](#quick-start)
+* [Push](#push)
+  * [Single Push](#single-push)
+  * [Batch Push](#batch-push)
+  * [Badge](#badge)
+  * [Analytics](#analytics)
+* [Devices](#devices)
+  * [Get Devices](#get-devices)
+  * [Get Device by Alias](#get-device-by-alias)
+  * [Register Device](#register-device)
+  * [Register Multiple Devices](#register-multiple-devices)
+  * [Unregister Device](#unregister-device)
+  * [Alias](#alias)
+  * [Tag Device](#tag-device)
+  * [Untag Device](#untag-device)
+  * [Device Location](#device-location)
+
+Quick Start
+-----------
 
 Install the [NuGet package](https://www.nuget.org/packages/PushBots.NET/) from the package manager console:
 
@@ -15,7 +35,8 @@ Create an instance of **PushBotsClient** by passing in your ***Application ID***
 var client = new PushBotsClient("55165801f85f8b457d", "b03052506824b4f3165ecc0");
 ```
 
-### Push
+Push
+----
 #### Single Push
 
 [Push a notification to a single device](https://pushbots.com/developer/api/1#PushOne)
@@ -76,7 +97,8 @@ var result = await client.GetPushAnalytics();
 return result;
 ```
 
-### Devices
+Devices
+-------
 
 #### Get Devices
 
