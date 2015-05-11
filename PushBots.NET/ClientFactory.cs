@@ -6,16 +6,17 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using PushBots.NET.Exceptions;
 
 namespace PushBots.NET
 {
     public class ClientFactory : IClientFactory
     {
-        private readonly string _apiUrl = PushBotsServiceConfiguration.Settings.ApiUrl;
+        private readonly PushBotsServiceConfiguration _settings = new PushBotsServiceConfiguration();
 
         public HttpClient GetClient(string appId)
         {
-            var client = new HttpClient { BaseAddress = new Uri(_apiUrl) };
+            var client = new HttpClient { BaseAddress = new Uri(_settings.ApiUrl) };
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -26,7 +27,7 @@ namespace PushBots.NET
 
         public HttpClient GetClient(string appId, string secret)
         {
-            var client = new HttpClient { BaseAddress = new Uri(_apiUrl) };
+            var client = new HttpClient { BaseAddress = new Uri(_settings.ApiUrl) };
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

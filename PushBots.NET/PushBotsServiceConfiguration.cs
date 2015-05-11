@@ -4,21 +4,25 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PushBots.NET.Exceptions;
 
 namespace PushBots.NET
 {
     public class PushBotsServiceConfiguration : ConfigurationSection
     {
-        // ReSharper disable once InconsistentNaming
-        private static readonly PushBotsServiceConfiguration _settings = ConfigurationManager.GetSection("PushBotsServiceSettings") as PushBotsServiceConfiguration;
-
-        public static PushBotsServiceConfiguration Settings
+        public PushBotsServiceConfiguration()
         {
-            get
+            try
             {
-                return _settings;
+                Settings = ConfigurationManager.GetSection("PushBotsServiceSettings") as PushBotsServiceConfiguration;
             }
+            catch (NullReferenceException ex)
+            {
+                throw new SettingsConfigNotFoundException("Could not find PushBotsServiceSettings configSection", ex);
+            }            
         }
+
+        public PushBotsServiceConfiguration Settings { get; private set; }
 
         [ConfigurationProperty("apiUrl", DefaultValue = "https://api.pushbots.com/")]
         public string ApiUrl
@@ -60,6 +64,48 @@ namespace PushBots.NET
         {
             get { return (string)this["devicesApiPath"]; }
             set { this["devicesApiPath"] = value; }
+        }
+
+        [ConfigurationProperty("registerDeviceApiPath", DefaultValue = "deviceToken")]
+        public string RegisterDeviceApiPath
+        {
+            get { return (string)this["registerDeviceApiPath"]; }
+            set { this["registerDeviceApiPath"] = value; }
+        }
+
+        [ConfigurationProperty("registerDeviceBatchApiPath", DefaultValue = "deviceToken/batch")]
+        public string RegisterDeviceBatchApiPath
+        {
+            get { return (string)this["registerDeviceBatchApiPath"]; }
+            set { this["registerDeviceBatchApiPath"] = value; }
+        }
+
+        [ConfigurationProperty("unregisterDeviceApiPath", DefaultValue = "deviceToken/del")]
+        public string UnregisterDeviceApiPath
+        {
+            get { return (string)this["unregisterDeviceApiPath"]; }
+            set { this["unregisterDeviceApiPath"] = value; }
+        }
+
+        [ConfigurationProperty("tagDeviceApiPath", DefaultValue = "tag")]
+        public string TagDeviceApiPath
+        {
+            get { return (string)this["tagDeviceApiPath"]; }
+            set { this["tagDeviceApiPath"] = value; }
+        }
+
+        [ConfigurationProperty("untagDeviceApiPath", DefaultValue = "tag/del")]
+        public string UntagDeviceApiPath
+        {
+            get { return (string)this["untagDeviceApiPath"]; }
+            set { this["untagDeviceApiPath"] = value; }
+        }
+
+        [ConfigurationProperty("deviceLocationApiPath", DefaultValue = "geo")]
+        public string DeviceLocationApiPath
+        {
+            get { return (string)this["deviceLocationApiPath"]; }
+            set { this["deviceLocationApiPath"] = value; }
         }
     }
 }

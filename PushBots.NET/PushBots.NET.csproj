@@ -54,6 +54,7 @@
     <Compile Include="ClientFactory.cs" />
     <Compile Include="Enums\Platform.cs" />
     <Compile Include="Exceptions\DeviceNotFoundException.cs" />
+    <Compile Include="Exceptions\SettingsConfigNotFoundException.cs" />
     <Compile Include="IClientFactory.cs" />
     <Compile Include="IPushBotsClient.cs" />
     <Compile Include="Models\BatchPush.cs" />

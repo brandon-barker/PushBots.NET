@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using PushBots.NET.Enums;
 using PushBots.NET.Exceptions;
 using PushBots.NET.Models;
 
@@ -19,12 +20,7 @@ namespace PushBots.NET
         private string Secret { get; set; }
 
         private readonly IClientFactory _clientFactory;
-
-        private readonly string _singlePushApiPath = PushBotsServiceConfiguration.Settings.SinglePushApiPath;
-        private readonly string _batchPushApiPath = PushBotsServiceConfiguration.Settings.BatchPushApiPath;
-        private readonly string _badgeApiPath = PushBotsServiceConfiguration.Settings.BadgeApiPath;
-        private readonly string _analyticsApiPath = PushBotsServiceConfiguration.Settings.AnalyticsApiPath;
-        private readonly string _devicesApiPath = PushBotsServiceConfiguration.Settings.DevicesApiPath;
+        private readonly PushBotsServiceConfiguration _settings = new PushBotsServiceConfiguration();
 
         /// <summary>
         /// Instantiate a PushBotsClient
@@ -49,7 +45,7 @@ namespace PushBots.NET
         {
             var client = _clientFactory.GetClient(AppId, Secret);
 
-            return await client.PostAsJsonAsync(_singlePushApiPath, message);
+            return await client.PostAsJsonAsync(_settings.SinglePushApiPath, message);
         }
 
         /// <summary>
@@ -62,7 +58,7 @@ namespace PushBots.NET
         {
             var client = _clientFactory.GetClient(AppId, Secret);
 
-            return await client.PostAsJsonAsync(_batchPushApiPath, message);
+            return await client.PostAsJsonAsync(_settings.BatchPushApiPath, message);
         }
 
         /// <summary>
@@ -77,7 +73,7 @@ namespace PushBots.NET
         {
             var client = _clientFactory.GetClient(AppId, Secret);
 
-            return await client.PutAsJsonAsync(_badgeApiPath, new {token, platform, badgecount});
+            return await client.PutAsJsonAsync(_settings.BadgeApiPath, new { token, platform, badgecount });
         }
 
         /// <summary>
@@ -87,8 +83,8 @@ namespace PushBots.NET
         /// <returns>A JSON Object containing Analytics Data</returns>
         public async Task<JObject> GetPushAnalytics()
         {
-            var client = _clientFactory.GetClient(AppId, Secret);            
-            var response = await client.GetAsync(_analyticsApiPath);
+            var client = _clientFactory.GetClient(AppId, Secret);
+            var response = await client.GetAsync(_settings.AnalyticsApiPath);
             var analytics = await response.Content.ReadAsAsync<JObject>();
 
             return analytics;
@@ -101,7 +97,7 @@ namespace PushBots.NET
         public async Task<IEnumerable<Device>> GetDevices()
         {
             var client = _clientFactory.GetClient(AppId, Secret);
-            var response = await client.GetAsync(_devicesApiPath);
+            var response = await client.GetAsync(_settings.DevicesApiPath);
             var analytics = await response.Content.ReadAsAsync<List<Device>>();
 
             return analytics;
@@ -123,6 +119,111 @@ namespace PushBots.NET
             }
 
             throw new DeviceNotFoundException(String.Format("Could not find a matching device with the supplied alias: {0}", alias));
+        }
+
+        /// <summary>
+        /// Register a Device
+        /// </summary>
+        /// <see cref="https://pushbots.com/developer/api/1#register"/>
+        /// <param name="device"></param>
+        /// <returns></returns>
+        public async Task<HttpResponseMessage> RegisterDevice(Device device)
+        {
+            var client = _clientFactory.GetClient(AppId, Secret);
+
+            return await client.PutAsJsonAsync(_settings.RegisterDeviceApiPath, device);
+        }
+
+        /// <summary>
+        /// Register multiple Devices (up to 500 per batch request)
+        /// </summary>
+        /// <see cref="https://pushbots.com/developer/api/1#batchtoken"/>
+        /// <param name="tokens"></param>
+        /// <param name="platform"></param>
+        /// <param name="tags"></param>
+        /// <returns></returns>
+        public async Task<HttpResponseMessage> RegisterDevice(string[] tokens, Platform platform, string[] tags)
+        {
+            var client = _clientFactory.GetClient(AppId, Secret);
+
+            return await client.PutAsJsonAsync(_settings.RegisterDeviceBatchApiPath, new { tokens, platform, tags });
+        }
+
+        /// <summary>
+        /// unRegister device token of the app from the database
+        /// </summary>
+        /// <see cref="https://pushbots.com/developer/api/1#unregister"/>
+        /// <returns></returns>
+        public async Task<HttpResponseMessage> UnregisterDevice(string token, Platform platform)
+        {
+            var client = _clientFactory.GetClient(AppId, Secret);
+
+            return await client.PutAsJsonAsync(_settings.UnregisterDeviceApiPath, new { token, platform });
+        }
+
+        /// <summary>
+        /// Add/update alias of a device.
+        /// </summary>
+        /// <see cref="https://pushbots.com/developer/api/1#alias"/>
+        /// <param name="platform"></param>
+        /// <param name="token"></param>
+        /// <param name="alias"></param>
+        /// <param name="currentAlias"></param>
+        /// <returns></returns>
+        public async Task<HttpResponseMessage> SetAlias(Platform platform, string token, string alias,
+            string currentAlias)
+        {
+            var client = _clientFactory.GetClient(AppId, Secret);
+
+            return await client.PutAsJsonAsync(_settings.UnregisterDeviceApiPath, new { platform, token, alias, current_alias = currentAlias });
+        }
+
+        /// <summary>
+        /// Tag a device with its token through SDK or Alias through your backend
+        /// </summary>
+        /// <see cref="https://pushbots.com/developer/api/1#tag" />
+        /// <param name="platform"></param>
+        /// <param name="tag"></param>
+        /// <param name="token"></param>
+        /// <param name="alias"></param>
+        /// <returns></returns>
+        public async Task<HttpResponseMessage> TagDevice(Platform platform, string tag, string token, string alias)
+        {
+            var client = _clientFactory.GetClient(AppId, Secret);
+
+            return await client.PutAsJsonAsync(_settings.TagDeviceApiPath, new { platform, tag, token, alias });
+        }
+
+        /// <summary>
+        /// unTag a device its token through SDK or Alias through your backend
+        /// </summary>
+        /// <see cref="https://pushbots.com/developer/api/1#deltag" />
+        /// <param name="platform"></param>
+        /// <param name="tag"></param>
+        /// <param name="token"></param>
+        /// <param name="alias"></param>
+        /// <returns></returns>
+        public async Task<HttpResponseMessage> UntagDevice(Platform platform, string tag, string token, string alias)
+        {
+            var client = _clientFactory.GetClient(AppId, Secret);
+
+            return await client.PutAsJsonAsync(_settings.UntagDeviceApiPath, new { platform, tag, token, alias });
+        }
+
+        /// <summary>
+        /// Add/update location of a device
+        /// </summary>
+        /// <see cref="https://pushbots.com/developer/api/1#geo" />
+        /// <param name="platform"></param>
+        /// <param name="token"></param>
+        /// <param name="lat"></param>
+        /// <param name="lng"></param>
+        /// <returns></returns>
+        public async Task<HttpResponseMessage> DeviceLocation(Platform platform, string token, string lat, string lng)
+        {
+            var client = _clientFactory.GetClient(AppId, Secret);
+
+            return await client.PutAsJsonAsync(_settings.DeviceLocationApiPath, new { platform, token, lat, lng });
         }
     }
 }
