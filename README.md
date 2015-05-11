@@ -1,22 +1,12 @@
 # PushBots.NET
 **Unofficial** .NET Client Library for the [PushBots v1 API](https://pushbots.com/developer/api/1)
 
-*This library is still in early development and is not yet ready for production use!*
-
 ### Quick Start
 
 Install the [NuGet package](https://www.nuget.org/packages/PushBots.NET/) from the package manager console:
 
 ```powershell
 Install-Package PushBots.NET
-```
-
-Add a configSection to your Web.config or App.config file
-
-```xml
-<configSections>
-    <section name="PushBotsServiceSettings" type="PushBots.NET.PushBotsServiceConfiguration, PushBots.NET" />
-</configSections>  
 ```
 
 Create an instance of **PushBotsClient** by passing in your ***Application ID*** and ***Secret*** (get this from your App settings page on the PushBots dashboard)
@@ -85,3 +75,71 @@ var result = await client.GetPushAnalytics();
 
 return result;
 ```
+
+### Devices
+
+#### Get Devices
+
+Utility function to retrieve all devices registered with PushBots along with their device token
+
+```c#
+var devices = client.GetDevices();
+```
+
+#### Get Device by Alias
+
+Get device information by it's registered Alias
+
+```c#
+var device = await client.GetDeviceByAlias("TestUser");
+```
+
+#### Register Device
+
+[Register device token of the app in the database for the first time and update it with every launch of the app, device data will be updated if registered already](https://pushbots.com/developer/api/1#register)
+
+```c#
+var device = new Device
+    {
+        Token = "xxxxxxxxxxx",
+        Platform = Platform.Android,
+        Latitude = "33.7489", // Optional
+        Longitude = "-84.3789", // Optional
+        Types = new[] {"Subscriptions", "Followers"}, // Optional
+        Tags = new[] {"Culture", "Egypt"}, // Optional
+        Alias = "test@example.com"
+    };
+
+    var response = await client.RegisterDevice(device);
+```
+
+#### Register Multiple Devices
+
+[Register multiple devices up to 500 Device per request](https://pushbots.com/developer/api/1#batchtoken)
+
+```c#
+var response = await client.RegisterDevice(
+    new [] {"xxxxx"}, // Array of Tokens
+    Platform.Android,
+    new[] { "Culture", "USA" } // Optional array of Tags
+    );
+```
+
+#### Unregister Device
+
+[unRegister device token of the app from the database](https://pushbots.com/developer/api/1#unregister)
+
+#### Alias
+[Add/update alias of a device](https://pushbots.com/developer/api/1#alias)
+
+#### Tag Device
+
+[Tag a device with its token through SDK or Alias through your backend](https://pushbots.com/developer/api/1#tag)
+
+#### Untag Device
+
+[unTag a device its token through SDK or Alias through your backend](https://pushbots.com/developer/api/1#deltag)
+
+#### Device Location
+
+[Add/update location of a device](https://pushbots.com/developer/api/1#geo)
