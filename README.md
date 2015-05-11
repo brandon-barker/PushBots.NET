@@ -35,6 +35,8 @@ Create an instance of **PushBotsClient** by passing in your ***Application ID***
 var client = new PushBotsClient("55165801f85f8b457d", "b03052506824b4f3165ecc0");
 ```
 
+**[back to top](#pushbotsnet)**
+
 Push
 ----
 #### Single Push
@@ -56,6 +58,8 @@ var pushMessageSingle = new SinglePush()
             await client.Push(pushMessageSingle);
 ```
 
+**[back to top](#pushbotsnet)**
+
 #### Batch Push
 
 [Push a notification to Devices under certain conditions](https://pushbots.com/developer/api/1#batch_push)
@@ -70,6 +74,8 @@ var pushMessage = new BatchPush()
 
             var result = await client.Push(pushMessage);
 ```
+
+**[back to top](#pushbotsnet)**
 
 #### Badge
 
@@ -87,6 +93,8 @@ return result;
 
 **NOTE: Currently only supports iOS platform, if you pass through a "1" for Android it will return an error**
 
+**[back to top](#pushbotsnet)**
+
 #### Analytics
 
 [Get Push Analytics for a single application](https://pushbots.com/developer/api/1#getAnalytics)
@@ -96,6 +104,8 @@ var result = await client.GetPushAnalytics();
 
 return result;
 ```
+
+**[back to top](#pushbotsnet)**
 
 Devices
 -------
@@ -108,6 +118,8 @@ Utility function to retrieve all devices registered with PushBots along with the
 var devices = client.GetDevices();
 ```
 
+**[back to top](#pushbotsnet)**
+
 #### Get Device by Alias
 
 Get device information by it's registered Alias
@@ -115,6 +127,8 @@ Get device information by it's registered Alias
 ```c#
 var device = await client.GetDeviceByAlias("TestUser");
 ```
+
+**[back to top](#pushbotsnet)**
 
 #### Register Device
 
@@ -135,6 +149,8 @@ var device = new Device
     var response = await client.RegisterDevice(device);
 ```
 
+**[back to top](#pushbotsnet)**
+
 #### Register Multiple Devices
 
 [Register multiple devices up to 500 Device per request](https://pushbots.com/developer/api/1#batchtoken)
@@ -147,21 +163,33 @@ var response = await client.RegisterDevice(
     );
 ```
 
+**[back to top](#pushbotsnet)**
+
 #### Unregister Device
 
 [unRegister device token of the app from the database](https://pushbots.com/developer/api/1#unregister)
 
+**[back to top](#pushbotsnet)**
+
 #### Alias
 [Add/update alias of a device](https://pushbots.com/developer/api/1#alias)
+
+**[back to top](#pushbotsnet)**
 
 #### Tag Device
 
 [Tag a device with its token through SDK or Alias through your backend](https://pushbots.com/developer/api/1#tag)
 
+**[back to top](#pushbotsnet)**
+
 #### Untag Device
 
 [unTag a device its token through SDK or Alias through your backend](https://pushbots.com/developer/api/1#deltag)
 
+**[back to top](#pushbotsnet)**
+
 #### Device Location
 
 [Add/update location of a device](https://pushbots.com/developer/api/1#geo)
+
+**[back to top](#pushbotsnet)**
